@@ -1,5 +1,4 @@
 -- make trigger for table items when there is an INSERT in table orders
-USE holberton;
 
 DELIMITER //
 
