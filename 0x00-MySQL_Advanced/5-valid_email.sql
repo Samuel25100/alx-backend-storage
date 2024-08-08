@@ -1,6 +1,5 @@
 -- creates a trigger that resets the attribute valid_email only when the
 -- email has been changed
-USE holberton;
 DELIMITER //
 
 DROP TRIGGER IF EXISTS updt_email;
