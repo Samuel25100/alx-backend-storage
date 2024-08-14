@@ -16,3 +16,14 @@ class Cache:
         key = str(uuid.uuid4())
         self.__redis.set(key, data)
         return key
+
+    def get(self, key, fn):
+        if (key):
+            val = self.__redis.get(key)
+            if (fn == None):
+                return val
+            elif (fn == int):
+                return int(val)
+            else:
+                return fn(val)
+        return None
