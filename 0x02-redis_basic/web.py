@@ -12,5 +12,4 @@ def get_page(url: str) -> str:
     if (r.exists(f"count:{url}")):
         count = int(r.get(f"count:{url}")) + 1
     r.setex(f"count:{url}", 10, count)
-    print("count:", count)
     return re
