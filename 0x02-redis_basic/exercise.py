@@ -70,3 +70,14 @@ class Cache:
             val = self._redis.get(key, int)
             return val
         return None
+
+    def replay(self, method: Callable) -> None:
+        """display the history of calls of a particular function"""
+        inky: str = method.__qualname__ + ":inputs"
+        outky: str = method.__qualname__ + ":outputs"
+        inputs = self._redis.lrange(inky, 0, -1)
+        outputs = self._redis.lrange(outky, 0, -1)
+        count: int = int(self._redis.llen(inky))
+        print(f"Cache.store was called {count} times:")
+        for inp, out in zip(inputs, outputs):
+            print(f"Cache.store(*{inp.decode()}) -> {out.decode()}")
