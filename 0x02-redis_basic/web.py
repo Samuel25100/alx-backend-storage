@@ -11,5 +11,6 @@ def get_page(url: str) -> str:
     r = Redis()
     if (r.exists(f"count:{url}")):
         count = int(r.get(f"count:{url}")) + 1
-    r.setex(f"count:{url}", 10, count)
+    r.setex(f"result:{url}", 10, re)
+    r.set(f"count:{url}", count)
     return re
