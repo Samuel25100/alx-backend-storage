@@ -6,6 +6,21 @@ from functools import wraps
 from typing import Union, Callable, Optional
 
 
+def call_history(method: Callable) -> Callable:
+    """store the history of inputs and outputs for a particular function"""
+    inky: str = method.__qualname__ + ":inputs"
+    outky: str = method.__qualname__ + ":outputs"
+
+    @wraps(method)
+    def warpper(self, *args, **kwargs):
+        """wrapper for decorator"""
+        self._redis.rpush(inky, str(args))
+        result = method(self, *args, **kwargs)
+        self._redis.rpush(outky, str(result))
+        return result
+    return warpper
+
+
 def count_calls(method: Callable) -> Callable:
     """method to count number Cache class methods call"""
     k: str = method.__qualname__
@@ -27,6 +42,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """create key and store data in database by key"""
